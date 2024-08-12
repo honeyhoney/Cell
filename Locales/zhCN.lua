@@ -108,6 +108,8 @@ L["Show while not in a group"] = "当不在队伍时显示"
 L["To open options frame, use /cell options"] = "用 /cell options 来打开选项窗口"
 L["Show Party"] = "小队时显示"
 L["Show while in a party"] = "当在小队时显示"
+L["Show Raid"] = "团队时显示"
+L["Show while in a raid"] = "当在团队时显示"
 L["Position"] = "位置"
 L["Lock Cell Frames"] = "把它给我锁死"
 L["Fade Out Menu"] = "淡出菜单"
@@ -117,10 +119,11 @@ L["Always Update Buffs"] = "总是更新增益"
 L["Always Update Debuffs"] = "总是更新减益"
 L["Ignore UNIT_AURA payloads"] = "无视 UNIT_AURA 事件的负载"
 L["This may help solve issues of indicators not updating correctly"] = "可能有助于解决指示器不能正确更新的问题"
-L["Override"] = "重写"
-L["Ensure that other addons get the right unit button"] = "确保其他插件获取到正确的单位按钮"
-L["This may cause unknown issues"] = "可能导致未知问题"
-L["For addons/WAs not dependent on LibGetFrame, use %s"] = "对于不依赖 LibGetFrame 的插件或WA，使用 %s"
+-- L["Override"] = "重写"
+-- L["Ensure that other addons get the right unit button"] = "确保其他插件获取到正确的单位按钮"
+-- L["This may cause unknown issues"] = "可能导致未知问题"
+-- L["For addons/WAs not dependent on LibGetFrame, use %s"] = "对于不依赖 LibGetFrame 的插件或WA，使用 %s"
+L["Frame priorities for LibGetFrame"] = "指定 LibGetFrame 获取单位按钮的的优先级"
 L["Increase Health Update Rate"] = "增加血条刷新速率"
 L["Use CLEU events to increase health update rate"] = "使用战斗记录事件来增加血条刷新速率"
 L["Translit Cyrillic to Latin"] = "将俄文转写为英文"
@@ -223,8 +226,7 @@ L["Remove"] = "移除"
 L["Left"] = "左键"
 L["Right"] = "右键"
 L["Middle"] = "中键"
-L["Button4"] = "侧键4"
-L["Button5"] = "侧键5"
+L["Button"] = "按键"
 L["ScrollUp"] = "滚轮上"
 L["ScrollDown"] = "滚轮下"
 
@@ -247,6 +249,7 @@ L["T"] = "天赋"
 L["P"] = "PvP天赋"
 L["C"] = "职业天赋"
 L["S"] = "专精天赋"
+L["H"] = "英雄天赋"
 
 L["Edit"] = "编辑"
 L["Extra Action Button"] = "额外按键"
@@ -344,6 +347,12 @@ L["set unit's name"] = "设置为目标单位的名字"
 L["set unit's pet"] = "设置为目标单位的宠物"
 L["not in combat"] = "非战斗中"
 
+L["Invalid layout name."] = "无效布局名称。"
+L["Layout imported: %s."] = "已导入布局：%s。"
+L["Layout added: %s."] = "已创建布局：%s。"
+L["Layout deleted: %s."] = "已删除布局：%s。"
+L["Layout renamed: %s to %s."] = "重命名布局 %s 为 %s。"
+
 -- L["Group Arrangement"] = "队伍排列"
 -- L["Button Size"] = "按钮尺寸"
 -- L["Pet Button"] = "宠物按钮"
@@ -386,7 +395,6 @@ L["|cff1Aff1AYes|r - Overwrite"] = "|cff1Aff1A是|r - 覆盖"
 L["|cffff1A1ANo|r - Create New"] = "|cffff1A1A否|r - 新建"
 L["Error"] = "错误"
 L["Incompatible Version"] = "版本不兼容"
-L["Layout imported: %s."] = "已导入布局：%s。"
 
 -------------------------------------------------
 -- indicators
@@ -506,8 +514,8 @@ L["Size"] = "尺寸"
 L["Size (Big)"] = "尺寸（大）"
 L["Border"] = "边框"
 L["Alpha"] = "透明度"
-L["Max Icons"] = "最大显示数量"
-L["Icons Per Line"] = "每行/列图标数"
+L["Max Displayed"] = "最大显示个数"
+L["Displayed Per Line"] = "每行/列显示个数"
 L["Format"] = "格式"
 L["shields"] = "护盾"
 L["hideIfEmptyOrFull"] = "当值为满或空时隐藏"
@@ -520,6 +528,7 @@ L["Always"] = "总是"
 L["hide icon animation"] = "隐藏图标动画"
 L["Anchor To"] = "定位到"
 L["Health Bar"] = "血条"
+L["Loss"] = "损失"
 L["Entire"] = "整体"
 L["Half"] = "半高"
 L["Solid"] = "纯色"
@@ -539,6 +548,8 @@ L["Anyone"] = "任何人"
 L["Others"] = "其他人"
 L["smooth"] = "平滑"
 L["Color By"] = "着色"
+L["Set Bar Max Value"] = "设置进度条最大值"
+L["Allow smaller value"] = "允许更小的值"
 
 L["Click to preview"] = "点击预览"
 L["Debug Mode"] = "调试模式"
@@ -844,6 +855,49 @@ L["CHANGELOGS"] = [[
     <p>（正式服）如果指示器不能正常刷新，尝试启用常规页面下的“总是更新增益/减益”选项。</p>
     <br/>
 
+    <h1>r238-release (Aug 7, 2024, 15:25 GMT+8)</h1>
+    <p>* 修复可能缺失的指示器。</p>
+    <p>* 更新本地化。</p>
+    <br/>
+
+    <h1>r237-release (Aug 6, 2024, 21:30 GMT+8)</h1>
+    <p>* （地心之战）更新一些指示器的默认法术（PR #165）。</p>
+    <p>* 更新渐变色选项（PR #181）。</p>
+    <p>+ 新代码片段变量 CELL_RANGE_CHECK_*。现在可以自定义距离检查所用的法术了。</p>
+    <p>+ 新自定义指示器类型：进度条组。</p>
+    <p>+ 为“颜色”类型的指示器添加了“血条（损失）”的选项。</p>
+    <p>+ （地心之战）将萨满的“天怒”添加到增益检查。</p>
+    <p>* 更新“血量阈值”指示器的层级。</p>
+    <p>* 略微优化 Cell.GetUnitFramesForLGF。</p>
+    <p>* 修复一个指示器加载的异常。</p>
+    <p>* 修复一些点击施法的问题。</p>
+    <p>* （地心之战）修复驱散检查。</p>
+    <p>* （怀旧服）修复“法术请求”。</p>
+    <p>* 更新本地化。</p>
+    <br/>
+
+    <h1>r236-release (Jul 24, 2024, 16:10 GMT+8)</h1>
+    <p>* 修复“外观”与“布局”页面的一些小问题。</p>
+    <p>* 更新本地化。</p>
+    <p>* 更新大灾变的世界标记功能。</p>
+    <br/>
+
+    <h1>r235-release (Jul 23, 2024, 20:00 GMT+8)</h1>
+    <p>+ 添加“团队时显示”选项（PR #176）。</p>
+    <p>* 修复满血颜色（PR #175）。</p>
+    <p>* （地心之战）修复战复计时、快速协助、法术/驱散请求。</p>
+    <p>* 修复指示器图标宽高比。</p>
+    <p>* 修复怀旧服副本减益无法创建的问题。</p>
+    <p>* 修复载具图标。</p>
+    <p>* 修复层数文本。</p>
+    <p>* 修复图标/色块组指示器的尺寸。</p>
+    <p>* 更新血条渐变色相关的选项。</p>
+    <p>* 更新 LibGetFrame 相关功能（Cell.GetUnitFrame -> Cell.GetUnitFramesForLGF）。</p>
+    <p>+ 为“状态文字”指示器添加了调节对齐方式的选项。</p>
+    <p>+ 添加俄语环境下的副本数据。</p>
+    <p>+ 新自定义指示器类型：边框。</p>
+    <br/>
+
     <h1>r234-release (Jul 13, 2024, 17:37 GMT+8)</h1>
     <p>+ 为“就位确认图标”指示器添加了位置相关的选项。</p>
     <p>* “重写 LibGetFrame”现在默认启用。</p>
@@ -1118,6 +1172,11 @@ L["CHANGELOGS"] = [[
     <p>* 更新繁中。</p>
     <br/>
 
+    <p><a href="older">]]..L["Click to view older changelogs"]..[[</a></p>
+    <br/>
+]]
+
+L["OLDER_CHANGELOGS"] = [[
     <h1>r199-release (Oct 21, 2023, 15:40 GMT+8)</h1>
     <p>* 更新“减伤”指示器的内置法术。</p>
     <p>+ 为增益类型的自定义指示器添加了“来源”选项。</p>
@@ -1297,11 +1356,6 @@ L["CHANGELOGS"] = [[
     <p>* 更新繁中。</p>
     <br/>
 
-    <p><a href="older">]]..L["Click to view older changelogs"]..[[</a></p>
-    <br/>
-]]
-
-L["OLDER_CHANGELOGS"] = [[
     <h1>r169-release (May 20, 2023, 04:18 GMT+8)</h1>
     <h2>正式服</h2>
     <p>+ 新指示器：个人光环。</p>

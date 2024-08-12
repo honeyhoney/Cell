@@ -10,6 +10,8 @@ local UnitIsConnected = UnitIsConnected
 local InCombatLockdown = InCombatLockdown
 local GetUnitName = GetUnitName
 local UnitGUID = UnitGUID
+local GetAuraSlots = C_UnitAuras.GetAuraSlots
+local GetAuraDataBySlot = C_UnitAuras.GetAuraDataBySlot
 
 --! AI followers, wrong value returned by UnitClassBase
 local UnitClassBase = function(unit)
@@ -157,26 +159,19 @@ end
 local function ForEachAuraHelper(button, func, continuationToken, ...)
     -- continuationToken is the first return value of UnitAuraSlots()
     local n = select('#', ...)
-    local index = 1
     for i = 1, n do
         local slot = select(i, ...)
-        local auraInfo = C_UnitAuras.GetAuraDataBySlot(button.unit, slot)
-        local done = func(button, auraInfo, index)
+        local auraInfo = GetAuraDataBySlot(button.unit, slot)
+        local done = func(button, auraInfo, i)
         if done then
             -- if func returns true then no further slots are needed, so don't return continuationToken
             return nil
         end
-        index = index + 1
     end
-    return continuationToken
 end
 
 local function ForEachAura(button, filter, func)
-    local continuationToken
-    repeat
-        -- continuationToken is the first return value of UnitAuraSltos
-        continuationToken = ForEachAuraHelper(button, func, UnitAuraSlots(button.unit, filter, nil, continuationToken))
-    until continuationToken == nil
+    ForEachAuraHelper(button, func, GetAuraSlots(button.unit, filter))
 end
 
 -- ----------------------------------------------------------------------- --
@@ -639,7 +634,7 @@ function CellQuickAssist_OnLoad(button)
     local deadTex = healthBar:CreateTexture(nil, "OVERLAY")
     button.deadTex = deadTex
     deadTex:SetAllPoints(healthBar)
-    deadTex:SetTexture("Interface\\Buttons\\WHITE8x8")
+    deadTex:SetTexture(Cell.vars.whiteTexture)
     deadTex:SetGradient("VERTICAL", CreateColor(0.545, 0, 0, 1), CreateColor(0, 0, 0, 1))
     deadTex:Hide()
 
@@ -1196,8 +1191,8 @@ local function UpdateQuickAssist(which)
             end
 
             -- update thickness
-            targetHighlight:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8x8", edgeSize = P:Scale(size)})
-            mouseoverHighlight:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8x8", edgeSize = P:Scale(size)})
+            targetHighlight:SetBackdrop({edgeFile = Cell.vars.whiteTexture, edgeSize = P:Scale(size)})
+            mouseoverHighlight:SetBackdrop({edgeFile = Cell.vars.whiteTexture, edgeSize = P:Scale(size)})
 
             -- update color
             targetHighlight:SetBackdropBorderColor(unpack(styleTable["targetColor"]))
@@ -1336,7 +1331,7 @@ local function QuickAssist_CreateIndicators(button)
     end
 
     -- buffs indicator (bar)
-    local buffBars = I.CreateAura_Bars(button:GetName().."BuffBars", button.indicatorFrame, 5)
+    local buffBars = I.CreateAura_QuickAssistBars(button:GetName().."BuffBars", button.indicatorFrame, 5)
     button.buffBars = buffBars
     buffBars:Show()
 
@@ -1365,7 +1360,7 @@ Cell:RegisterCallback("AddonLoaded", "QuickAssist_AddonLoaded", AddonLoaded)
 
 local function UpdatePixelPerfect()
     for i = 1, 40 do
-        header[i]:SetBackdrop({edgeFile = "Interface\\Buttons\\WHITE8x8", edgeSize = P:Scale(CELL_BORDER_SIZE)})
+        header[i]:SetBackdrop({edgeFile = Cell.vars.whiteTexture, edgeSize = P:Scale(CELL_BORDER_SIZE)})
         header[i]:SetBackdropBorderColor(unpack(CELL_BORDER_COLOR))
 
         header[i].healthBar:SetPoint("TOPLEFT", header[i], "TOPLEFT", P:Scale(1), P:Scale(-1))

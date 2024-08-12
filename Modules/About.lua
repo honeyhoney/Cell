@@ -159,8 +159,9 @@ local function CreateSpecialThanksPane()
     specialThanksText:SetSpacing(5)
     specialThanksText:SetJustifyH("LEFT")
     specialThanksText:SetText(
-        "|cffffff00Reat TV(YouTube), 钛锬(NGA), warbaby(爱不易)|r\n"..
-        "|cffff0000YouTube:|r AutomaticJak, JFunkGaming, yumytv\n"..
+        "|cffffff00Reat TV(YouTube), 钛锬, warbaby(爱不易)|r\n"..
+        "|cffff0000Wago:|r Ora\n"..
+        "|cffff3333YouTube:|r AutomaticJak, JFunkGaming, yumytv\n"..
         "|cff5662f6Discord:|r aba, BinarySunshine, Bruds, clankz., DreadMesh, Gharr, honeyhoney, leaKsi, Missgunst, Serghei, Vollmerino, Xepheris"
     )
 end
@@ -273,7 +274,7 @@ local function CreateSupportersPane()
     local bgTex = supportersPane:CreateTexture(nil, "BACKGROUND", nil, 0)
     bgTex:SetPoint("TOPLEFT", -5, 5)
     bgTex:SetPoint("BOTTOMRIGHT", 5, -5)
-    bgTex:SetTexture("Interface\\Buttons\\WHITE8x8")
+    bgTex:SetTexture(Cell.vars.whiteTexture)
     bgTex:SetGradient("HORIZONTAL", CreateColor(0.1, 0.1, 0.1, 1), CreateColor(0.1, 0.1, 0.1, 0.7))
 
     local supportersFrame1 = CreateFrame("Frame", nil, supportersPane)
@@ -375,7 +376,7 @@ local links = {}
 local function CreateLink(parent, id, icon, onEnter)
     local f = CreateFrame("Frame", nil, parent, "BackdropTemplate")
     P:Size(f, 34, 34)
-    f:SetBackdrop({bgFile = "Interface\\Buttons\\WHITE8x8"})
+    f:SetBackdrop({bgFile = Cell.vars.whiteTexture})
     f:SetBackdropColor(0, 0, 0, 1)
 
     links[id] = f
@@ -404,7 +405,7 @@ end
 
 local function CreateLinksPane()
     local linksPane = Cell:CreateTitledPane(aboutTab, L["Links"], 422, 100)
-    linksPane:SetPoint("TOPLEFT", aboutTab, "TOPLEFT", 5, -430)
+    linksPane:SetPoint("TOPLEFT", aboutTab, "TOPLEFT", 5, -440)
 
     local current
 
@@ -468,7 +469,7 @@ local function CreateLinksPane()
 
     --! afdian
     local afdian = CreateLink(linksPane, "afdian", "Interface\\AddOns\\Cell\\Media\\Links\\afdian.tga", function()
-        current = "https://afdian.net/a/enderneko"
+        current = "https://afdian.com/a/enderneko"
         linksEB:SetText(current)
         linksEB:ClearFocus()
     end)
@@ -488,7 +489,7 @@ end
 -------------------------------------------------
 local function CreateImportExportPane()
     local iePane = Cell:CreateTitledPane(aboutTab, L["Import & Export All Settings"], 422, 50)
-    iePane:SetPoint("TOPLEFT", 5, -545)
+    iePane:SetPoint("TOPLEFT", 5, -555)
 
     local importBtn = Cell:CreateButton(iePane, L["Import"], "accent-hover", {200, 20})
     importBtn:SetPoint("TOPLEFT", 5, -27)

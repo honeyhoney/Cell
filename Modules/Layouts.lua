@@ -187,7 +187,7 @@ local function CreateLayoutPreview()
             -- header[j]:SetSize(30, 20)
 
             header[j].tex = header:CreateTexture(nil, "ARTWORK")
-            header[j].tex:SetTexture("Interface\\Buttons\\WHITE8x8")
+            header[j].tex:SetTexture(Cell.vars.whiteTexture)
             header[j].tex:SetPoint("TOPLEFT", header[j], "TOPLEFT", P:Scale(1), P:Scale(-1))
             header[j].tex:SetPoint("BOTTOMRIGHT", header[j], "BOTTOMRIGHT", P:Scale(-1), P:Scale(1))
 
@@ -227,7 +227,7 @@ local function CreateLayoutPreview()
         f:SetAlpha(0.555)
 
         f.tex = layoutPreview.combinedHeader:CreateTexture(nil, "ARTWORK")
-        f.tex:SetTexture("Interface\\Buttons\\WHITE8x8")
+        f.tex:SetTexture(Cell.vars.whiteTexture)
         f.tex:SetPoint("TOPLEFT", f, "TOPLEFT", P:Scale(1), P:Scale(-1))
         f.tex:SetPoint("BOTTOMRIGHT", f, "BOTTOMRIGHT", P:Scale(-1), P:Scale(1))
         f.tex:SetVertexColor(F:ConvertRGB(255, 0, 0, 1 + ((1 - i) * 0.02)))
@@ -568,7 +568,7 @@ local function CreateNPCPreview()
         npcPreview.header[i]:SetAlpha(0.555)
 
         npcPreview.header[i].tex = npcPreview.header:CreateTexture(nil, "ARTWORK")
-        npcPreview.header[i].tex:SetTexture("Interface\\Buttons\\WHITE8x8")
+        npcPreview.header[i].tex:SetTexture(Cell.vars.whiteTexture)
 
         npcPreview.header[i].tex:SetPoint("TOPLEFT", npcPreview.header[i], "TOPLEFT", P:Scale(1), P:Scale(-1))
         npcPreview.header[i].tex:SetPoint("BOTTOMRIGHT", npcPreview.header[i], "BOTTOMRIGHT", P:Scale(-1), P:Scale(1))
@@ -817,7 +817,7 @@ local function CreateRaidPetPreview()
         raidPetPreview.header[i]:SetAlpha(0.555)
 
         raidPetPreview.header[i].tex = raidPetPreview.header:CreateTexture(nil, "ARTWORK")
-        raidPetPreview.header[i].tex:SetTexture("Interface\\Buttons\\WHITE8x8")
+        raidPetPreview.header[i].tex:SetTexture(Cell.vars.whiteTexture)
 
         raidPetPreview.header[i].tex:SetPoint("TOPLEFT", raidPetPreview.header[i], "TOPLEFT", P:Scale(1), P:Scale(-1))
         raidPetPreview.header[i].tex:SetPoint("BOTTOMRIGHT", raidPetPreview.header[i], "BOTTOMRIGHT", P:Scale(-1), P:Scale(1))
@@ -1076,7 +1076,7 @@ local function CreateSpotlightPreview()
         spotlightPreview.header[i]:SetAlpha(0.555)
 
         spotlightPreview.header[i].tex = spotlightPreview.header:CreateTexture(nil, "ARTWORK")
-        spotlightPreview.header[i].tex:SetTexture("Interface\\Buttons\\WHITE8x8")
+        spotlightPreview.header[i].tex:SetTexture(Cell.vars.whiteTexture)
 
         spotlightPreview.header[i].tex:SetPoint("TOPLEFT", spotlightPreview.header[i], "TOPLEFT", P:Scale(1), P:Scale(-1))
         spotlightPreview.header[i].tex:SetPoint("BOTTOMRIGHT", spotlightPreview.header[i], "BOTTOMRIGHT", P:Scale(-1), P:Scale(1))
@@ -1340,6 +1340,13 @@ local LoadLayoutDB, UpdateButtonStates, LoadLayoutAutoSwitchDB
 --     enabledLayoutText:SetText("|cFF777777"..L["Current"]..": "..(Cell.vars.currentLayout == "default" and _G.DEFAULT or Cell.vars.currentLayout))
 -- end
 
+local function IsValidLayoutName(name)
+    return name and name ~= ""
+        and strlower(name) ~= "default"and name ~= _G.DEFAULT
+        -- and not strfind(name, ":") and not strfind(name, "!")
+        and not CellDB["layouts"][name]
+end
+
 local function CreateLayoutPane()
     local layoutPane = Cell:CreateTitledPane(layoutsTab, L["Layout"], 205, 80)
     layoutPane:SetPoint("TOPLEFT", 5, -5)
@@ -1362,7 +1369,7 @@ local function CreateLayoutPane()
             local name = strtrim(self.editBox:GetText())
             local inherit = self.dropdown1:GetSelected()
 
-            if name ~= "" and strlower(name) ~= "default" and name ~= _G.DEFAULT and strlower(name) ~= "none" and not CellDB["layouts"][name] then
+            if IsValidLayoutName(name) then
                 -- update db copy current layout
                 if inherit == "cell-default-layout" then
                     CellDB["layouts"][name] = F:Copy(Cell.defaults.layout)
@@ -1382,7 +1389,7 @@ local function CreateLayoutPane()
                 LoadAutoSwitchDropdowns()
                 LoadLayoutDB(name)
                 UpdateButtonStates()
-                F:Print(L["Layout added: "]..name..".")
+                F:Print(L["Layout added: %s."]:format(name))
             else
                 F:Print(L["Invalid layout name."])
             end
@@ -1424,11 +1431,11 @@ local function CreateLayoutPane()
     renameBtn:SetScript("OnClick", function()
         local popup = Cell:CreateConfirmPopup(layoutsTab, 200, L["Rename layout"].." "..selectedLayout, function(self)
             local name = strtrim(self.editBox:GetText())
-            if name ~= "" and strlower(name) ~= "default" and name ~= _G.DEFAULT and not CellDB["layouts"][name] then
+            if IsValidLayoutName(name) then
                 -- update db
                 CellDB["layouts"][name] = CellDB["layouts"][selectedLayout]
                 CellDB["layouts"][selectedLayout] = nil
-                F:Print(L["Layout renamed: "].." "..selectedLayout.." "..L["to"].." "..name..".")
+                F:Print(L["Layout renamed: %s to %s."]:format(selectedLayout, name))
 
                 -- update auto switch dropdowns
                 LoadAutoSwitchDropdowns()
@@ -1506,7 +1513,7 @@ local function CreateLayoutPane()
         local popup = Cell:CreateConfirmPopup(layoutsTab, 200, L["Delete layout"].." "..selectedLayout.."?", function(self)
             -- update db
             CellDB["layouts"][selectedLayout] = nil
-            F:Print(L["Layout deleted: "]..selectedLayout..".")
+            F:Print(L["Layout deleted: %s."]:format(selectedLayout))
 
             -- update auto switch dropdowns
             LoadAutoSwitchDropdowns()
@@ -2088,7 +2095,7 @@ local function CreateRoleOrderWidget(parent)
             -- self:Hide() --! Hide() will cause OnDragStop trigger TWICE!!!
             C_Timer.After(0.05, function()
                 local b = F:GetMouseFocus()
-                if b and b._role then
+                if b ~= self and b and b._role then
                     local roleToIndex = F:ConvertTable(selectedLayoutTable["main"]["roleOrder"])
                     -- print(self._role, "->", b._role)
 
@@ -2897,6 +2904,7 @@ local function LayoutImported(name)
         -- update dropdown
         layoutDropdown:AddItem({
             ["text"] = name,
+            ["value"] = name,
             ["onClick"] = function()
                 LoadLayoutDB(name)
                 UpdateButtonStates()

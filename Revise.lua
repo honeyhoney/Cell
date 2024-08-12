@@ -2323,7 +2323,6 @@ function F:Revise()
             end
         end
     end
-    ]=]
 
     -- r200-release
     if CellDB["revise"] and dbRevision < 200 then
@@ -2562,9 +2561,9 @@ function F:Revise()
         end
 
         -- set alwaysUpdateDebuffs default to true
-        if not CellDB["general"]["alwaysUpdateDebuffs"] then
-            CellDB["general"]["alwaysUpdateDebuffs"] = true
-        end
+        -- if not CellDB["general"]["alwaysUpdateDebuffs"] then
+        --     CellDB["general"]["alwaysUpdateDebuffs"] = true
+        -- end
     end
 
     -- r217-release
@@ -2623,6 +2622,7 @@ function F:Revise()
             CellDB["appearance"]["gradientColors"] = {{1,0,0}, {1,0.7,0}, {0.7,1,0}}
         end
     end
+    ]=]
 
     -- r221-release
     if CellDB["revise"] and dbRevision < 221 then
@@ -2982,14 +2982,13 @@ function F:Revise()
         if CellDB["consumables"] then
             CellDB["actions"] = CellDB["consumables"]
             CellDB["consumables"] = nil
-
-            for _, layout in pairs(CellDB["layouts"]) do
-                for _, i in pairs(layout["indicators"]) do
-                    if i.indicatorName == "consumables" then
-                        i.name = "Actions"
-                        i.indicatorName = "actions"
-                        break
-                    end
+        end
+        for _, layout in pairs(CellDB["layouts"]) do
+            for _, i in pairs(layout["indicators"]) do
+                if i.indicatorName == "consumables" then
+                    i.name = "Actions"
+                    i.indicatorName = "actions"
+                    break
                 end
             end
         end
@@ -3080,6 +3079,25 @@ function F:Revise()
             CellDB["appearance"]["gradientColors"][4] = 0.05
             CellDB["appearance"]["gradientColors"][5] = 0.95
         end
+
+        if type(CellDB["general"]["showRaid"]) ~= "boolean" then
+            CellDB["general"]["showRaid"] = true
+        end
+    end
+
+    -- r237-release
+    if CellDB["revise"] and dbRevision < 237 then
+        if not CellDB["appearance"]["gradientColorsLoss"] then
+            CellDB["appearance"]["gradientColorsLoss"] = F:Copy(Cell.defaults.appearance.gradientColorsLoss)
+        end
+
+        if type(CellDB["general"]["framePriority"]) ~= "table" then
+            CellDB["general"]["framePriority"] = {
+                {"Main", true},
+                {"Spotlight", false},
+                {"Quick Assist", false},
+            }
+        end
     end
 
     -- ----------------------------------------------------------------------- --
@@ -3095,24 +3113,24 @@ function F:Revise()
                 local name = t["indicatorName"]
                 if t["type"] == "built-in" and toValidate[name] then
                     if i == toValidate[name] then
-                        -- copy valid indicator
-                        -- print(layoutName, "RIGHT", i, name)
-                        tinsert(temp, t)
+                        -- copy correct indicator
+                        F:Debug(layoutName, "CORRECT_FOUND", i, name)
+                        tinsert(temp, i, t)
                     else
                         -- search for correct indicator
                         local found
                         for j = i, #layout["indicators"] do
                             if name == layout["indicators"][j]["indicatorName"] then
-                                -- print(layoutName, "WRONG_FOUND", j, "->", toValidate[name], name)
+                                F:Debug(layoutName, "WRONG_FOUND", j, "->", toValidate[name], name)
                                 found = true
-                                tinsert(temp, layout["indicators"][j])
+                                tinsert(temp, toValidate[name], layout["indicators"][j])
                                 break
                             end
                         end
                         -- not found, copy from Defaults
                         if not found then
-                            -- print(layoutName, "WRONG_NOT_FOUND", i, name)
-                            tinsert(temp, Cell.defaults.layout.indicators[toValidate[name]])
+                            F:Debug(layoutName, "WRONG_NOT_FOUND", i, name)
+                            tinsert(temp, toValidate[name], F:Copy(Cell.defaults.layout.indicators[toValidate[name]]))
                         end
                     end
                     -- remove validated
@@ -3120,8 +3138,33 @@ function F:Revise()
                 end
             end
 
+            -- fix missing indicators
+            for name, index in pairs(toValidate) do
+                if temp[index] then --? possible?
+                    F:Debug(layoutName, "FIXED_MISSING_REPLACE", index, name)
+                    temp[index] = F:Copy(Cell.defaults.layout.indicators[index])
+                else
+                    F:Debug(layoutName, "FIXED_MISSING_INSERT", index, name)
+                    tinsert(temp, index, F:Copy(Cell.defaults.layout.indicators[index]))
+                end
+            end
+
+            -- check indices
+            local maxKey
+            for i, t in pairs(temp) do
+                local name = t["indicatorName"]
+                if Cell.defaults.indicatorIndices[name] ~= i then
+                    temp[i] = F:Copy(Cell.defaults.layout.indicators[index])
+                    F:Print(L["Reset"] .. " " .. L[t["name"]])
+                end
+                maxKey = max(maxKey or 0, i)
+            end
+            for i = Cell.defaults.builtIns + 1, maxKey do
+                temp[i] = nil
+            end
+
             -- customs
-            for i, t in ipairs(layout["indicators"]) do
+            for i, t in pairs(layout["indicators"]) do
                 if t["type"] ~= "built-in" then
                     tinsert(temp, t)
                 end

@@ -87,6 +87,49 @@ select(2, ...).L = setmetatable({
         <p>(Retail) Enable "Always Update Buffs/Debuffs" in General tab, if indicators do not update correctly.</p>
         <br/>
 
+        <h1>r238-release (Aug 7, 2024, 15:25 GMT+8)</h1>
+        <p>* Fixed missing indicators.</p>
+        <p>* Updated deDE and zhTW.</p>
+        <br/>
+
+        <h1>r237-release (Aug 6, 2024, 21:30 GMT+8)</h1>
+        <p>* (TWW) Updated default indicator spells (PR #165).</p>
+        <p>* Updated gradient colors (PR #181).</p>
+        <p>+ New snippet var CELL_RANGE_CHECK_*. Custom spells can now be used for range checking.</p>
+        <p>+ New custom indicator type: Bars.</p>
+        <p>+ Added "Health Bar (Loss)" option to Color indicator.</p>
+        <p>+ (TWW) Added Skyfury to Buff Tracker.</p>
+        <p>* Updated layer of Health Thresholds indicator.</p>
+        <p>* Slightly optimized Cell.GetUnitFramesForLGF.</p>
+        <p>* Fixed an indicator loading issue.</p>
+        <p>* Fixed some click-casting issues.</p>
+        <p>* (TWW) Fixed dispel check.</p>
+        <p>* (Classic) Fixed Spell Request.</p>
+        <p>* Updated deDE and zhTW.</p>
+        <br/>
+
+        <h1>r236-release (Jul 24, 2024, 16:10 GMT+8)</h1>
+        <p>* Fixed appearance/layout tab.</p>
+        <p>* Updated locales.</p>
+        <p>* Updated world marks for cata.</p>
+        <br/>
+
+        <h1>r235-release (Jul 23, 2024, 20:00 GMT+8)</h1>
+        <p>+ Added "Show Raid" option (PR #176).</p>
+        <p>* Fixed full health color (PR #175).</p>
+        <p>* (TWW) Fixed BR timer, QuickAssist, Spell/Dispel Request.</p>
+        <p>* Fixed icon aspect ratio.</p>
+        <p>* Fixed raid debuff creation on classic.</p>
+        <p>* Fixed vehicle icon.</p>
+        <p>* Fixed stack text.</p>
+        <p>* Fixed size of indicator group.</p>
+        <p>* Updated gradient color options for health bar.</p>
+        <p>* Updated LibGetFrame related functions (Cell.GetUnitFrame -> Cell.GetUnitFramesForLGF).</p>
+        <p>+ Added an option to adjust StatusText alignment.</p>
+        <p>+ Added expansion data for ruRU.</p>
+        <p>+ New custom indicator type: Border.</p>
+        <br/>
+
         <h1>r234-release (Jul 13, 2024, 17:37 GMT+8)</h1>
         <p>+ Added "position" for Ready Check Icon indicator.</p>
         <p>* "Override LibGetFrame" is now enabled by default.</p>
@@ -361,6 +404,11 @@ select(2, ...).L = setmetatable({
         <p>* Updated zhTW.</p>
         <br/>
 
+        <p><a href="older">Click to view older changelogs</a></p>
+        <br/>
+    ]],
+
+    ["OLDER_CHANGELOGS"] = [[
         <h1>r199-release (Oct 21, 2023, 15:40 GMT+8)</h1>
         <p>* Updated spells of Defensives and Externals.</p>
         <p>+ Added "Cast By" option to custom buff indicators.</p>
@@ -540,11 +588,6 @@ select(2, ...).L = setmetatable({
         <p>* Updated zhTW.</p>
         <br/>
 
-        <p><a href="older">Click to view older changelogs</a></p>
-        <br/>
-    ]],
-
-    ["OLDER_CHANGELOGS"] = [[
         <h1>r169-release (May 20, 2023, 04:18 GMT+8)</h1>
         <h2>Retail</h2>
         <p>+ New indicator: Private Auras.</p>
